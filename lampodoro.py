@@ -7,6 +7,12 @@ import os
 
 class Lampodoro:
     def __init__(self, root):
+        """
+        Inicializa o Lampodoro.
+
+        Args:
+            root (tk.Tk): O objeto root da interface gráfica Tkinter.
+        """
         self.root = root
         self.root.title(_("Lampodoro"))
         self.work_time = tk.StringVar()
@@ -20,6 +26,9 @@ class Lampodoro:
         self.create_widgets()
 
     def create_widgets(self):
+        """
+        Cria os widgets da interface gráfica.
+        """
         label_work = tk.Label(self.root, text=_("Tempo de trabalho (minutos):"))
         label_work.pack()
         entry_work = tk.Entry(self.root, textvariable=self.work_time)
@@ -48,6 +57,10 @@ class Lampodoro:
         self.timer_label.pack()
 
     def load_settings(self):
+        """
+        Carrega as configurações salvas do arquivo lampodoro_settings.ini.
+        Caso o arquivo não exista ou não possa ser lido, valores padrão serão utilizados.
+        """
         config = configparser.ConfigParser()
         try:
             config.read("lampodoro_settings.ini")
@@ -55,13 +68,14 @@ class Lampodoro:
             self.break_time.set(config.get("Settings", "break_time"))
             self.cycles.set(config.getint("Settings", "cycles"))
         except:
-            # Caso o arquivo de configuração não exista ou não possa ser lido, 
-            # valores padrão serão utilizados.
             self.work_time.set("25")
             self.break_time.set("5")
             self.cycles.set(4)
 
     def save_settings(self):
+        """
+        Salva as configurações personalizadas do usuário no arquivo lampodoro_settings.ini.
+        """
         config = configparser.ConfigParser()
         config["Settings"] = {
             "work_time": self.work_time.get(),
@@ -72,6 +86,9 @@ class Lampodoro:
             config.write(config_file)
 
     def start_pomodoro(self):
+        """
+        Inicia os ciclos de trabalho e pausa do Pomodoro.
+        """
         if not self.running:
             self.save_settings()
             self.current_cycle.set(0)
@@ -90,10 +107,26 @@ class Lampodoro:
             self.update_cycle_label()
 
     def format_time(self, seconds):
+        """
+        Formata o tempo em segundos para o formato 'MM:SS'.
+
+        Args:
+            seconds (int): O tempo em segundos.
+
+        Returns:
+            str: O tempo formatado no formato 'MM:SS'.
+        """
         m, s = divmod(int(seconds), 60)
         return '{:02d}:{:02d}'.format(m, s)
 
     def run_timer(self, seconds, message):
+        """
+        Executa o timer para o tempo especificado.
+
+        Args:
+            seconds (int): O tempo em segundos.
+            message (str): A mensagem a ser exibida quando o tempo se esgotar.
+        """
         self.running = True
         self.start_time = time.time()
         while seconds > 0:
@@ -111,9 +144,15 @@ class Lampodoro:
         messagebox.showinfo(_("Lampodoro"), message)
 
     def stop_pomodoro(self):
+        """
+        Para a execução dos ciclos de trabalho e pausa.
+        """
         self.running = False
 
     def update_cycle_label(self):
+        """
+        Atualiza o label do ciclo atual.
+        """
         current_cycle = self.current_cycle.get()
         total_cycles = self.cycles.get()
         self.current_cycle_label.config(text=_("Ciclo atual: {}/{}").format(current_cycle, total_cycles))
