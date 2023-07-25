@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_US\n"
+
+msgid "Tempo de trabalho (minutos):"
+msgstr "Work time (minutes):"
+
+msgid "Tempo de pausa (minutos):"
+msgstr "Break time (minutes):"
+
+msgid "Quantos ciclos Pomodoro:"
+msgstr "How many Pomodoro cycles:"
+
+msgid "Iniciar"
+msgstr "Start"
+
+msgid "Parar"
+msgstr "Stop"
+
+msgid "Lampodoro"
+msgstr "Lampodoro"
