@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import time
+import configparser
 
 class Lampodoro:
     def __init__(self, root):
@@ -11,6 +12,7 @@ class Lampodoro:
         self.cycles = tk.IntVar()
         self.running = False
 
+        self.load_settings()
         self.create_widgets()
 
     def create_widgets(self):
@@ -35,8 +37,33 @@ class Lampodoro:
         stop_button = tk.Button(self.root, text="Parar", command=self.stop_pomodoro)
         stop_button.pack()
 
+    def load_settings(self):
+        config = configparser.ConfigParser()
+        try:
+            config.read("lampodoro_settings.ini")
+            self.work_time.set(config.get("Settings", "work_time"))
+            self.break_time.set(config.get("Settings", "break_time"))
+            self.cycles.set(config.getint("Settings", "cycles"))
+        except:
+            # Caso o arquivo de configuração não exista ou não possa ser lido, 
+            # valores padrão serão utilizados.
+            self.work_time.set("25")
+            self.break_time.set("5")
+            self.cycles.set(4)
+
+    def save_settings(self):
+        config = configparser.ConfigParser()
+        config["Settings"] = {
+            "work_time": self.work_time.get(),
+            "break_time": self.break_time.get(),
+            "cycles": self.cycles.get()
+        }
+        with open("lampodoro_settings.ini", "w") as config_file:
+            config.write(config_file)
+
     def start_pomodoro(self):
         if not self.running:
+            self.save_settings()
             work_time = int(self.work_time.get()) * 60
             break_time = int(self.break_time.get()) * 60
             cycles = self.cycles.get()
