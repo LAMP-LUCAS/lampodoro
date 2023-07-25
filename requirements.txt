@@ -1,0 +1,2 @@
+configparser==6.0.0
+tk==0.1.0
