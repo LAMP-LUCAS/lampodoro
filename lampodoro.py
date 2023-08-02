@@ -118,7 +118,7 @@ class Lampodoro:
         """
         m, s = divmod(int(seconds), 60)
         return '{:02d}:{:02d}'.format(m, s)
-
+ 
     def run_timer(self, seconds, message):
         """
         Executa o timer para o tempo especificado.
@@ -132,12 +132,12 @@ class Lampodoro:
         while seconds > 0:
             if not self.running:
                 break
-            time_format = self.format_time(seconds)
+            elapsed_time = time.time() - self.start_time
+            seconds_left = max(0, seconds - elapsed_time)
+            time_format = self.format_time(seconds_left)
             self.timer_label.config(text=_("Tempo restante: ") + time_format)
             self.root.update()
             time.sleep(1)
-            elapsed_time = time.time() - self.start_time
-            seconds = max(0, seconds - elapsed_time)
         self.running = False
         self.root.title(_("Lampodoro"))
         self.timer_label.config(text=_("Tempo restante: "))
